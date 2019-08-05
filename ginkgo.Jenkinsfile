@@ -116,6 +116,7 @@ pipeline {
                         TESTDIR="${GOPATH}/${PROJ_PATH}/test"
                         NETNEXT="true"
                         K8S_VERSION="1.11"
+						KUBECONFIG="vagrant-kubeconfig"
                     }
                     steps {
                         sh 'mkdir -p ${GOPATH}/src/github.com/cilium'
@@ -125,6 +126,10 @@ pipeline {
                                 sh 'vagrant destroy k8s1-${K8S_VERSION} k8s2-${K8S_VERSION} --force'
                                 sh 'vagrant up k8s1-${K8S_VERSION} k8s2-${K8S_VERSION} --provision'
                                 sh './get-vagrant-kubeconfig.sh > vagrant-kubeconfig'
+                                sh 'cat vagrant-kubeconfig'
+                                sh 'vagrant ssh k8s1-${K8S_VERSION} -- sudo cat /etc/kubernetes/admin.conf'
+                                sh 'cat .vagrant/machines/k8s1-${K8S_VERSION}/virtualbox/id | xargs vboxmanage showvminfo --machinereadable'
+                                sh 'kubectl get nodes'
                             }
                         }
                     }
@@ -144,13 +149,21 @@ pipeline {
                         GOPATH="${WORKSPACE}/${TESTED_SUITE}-gopath"
                         TESTDIR="${GOPATH}/${PROJ_PATH}/test"
                         K8S_VERSION="1.15"
+						KUBECONFIG="vagrant-kubeconfig"
                     }
                     steps {
                         sh 'mkdir -p ${GOPATH}/src/github.com/cilium'
                         sh 'cp -a ${WORKSPACE}/${PROJ_PATH} ${GOPATH}/${PROJ_PATH}'
                         retry(3) {
-                            sh 'cd ${TESTDIR}; vagrant destroy k8s1-1.15 k8s2-1.15 --force'
-                            sh 'cd ${TESTDIR}; vagrant up k8s1-1.15 k8s2-1.15 --provision'
+                            dir("${TESTDIR}") {
+                                sh 'cd ${TESTDIR}; vagrant destroy k8s1-1.15 k8s2-1.15 --force'
+                                sh 'cd ${TESTDIR}; vagrant up k8s1-1.15 k8s2-1.15 --provision'
+                                sh './get-vagrant-kubeconfig.sh > vagrant-kubeconfig'
+                                sh 'cat vagrant-kubeconfig'
+                                sh 'vagrant ssh k8s1-${K8S_VERSION} -- sudo cat /etc/kubernetes/admin.conf'
+                                sh 'cat .vagrant/machines/k8s1-${K8S_VERSION}/virtualbox/id | xargs vboxmanage showvminfo --machinereadable'
+                                sh 'kubectl get nodes'
+                            }
                         }
                     }
                     post {
@@ -234,7 +247,7 @@ pipeline {
                         TESTDIR="${GOPATH}/${PROJ_PATH}/test"
                     }
                     steps {
-                        sh 'cd ${TESTDIR}; K8S_VERSION=1.15 ginkgo --focus=" K8s*" -v --failFast=${FAILFAST} -- -cilium.provision=false -cilium.timeout=${GINKGO_TIMEOUT}'
+                        sh 'cd ${TESTDIR}; K8S_VERSION=1.15 ginkgo --focus=" K8s*" -v --failFast=${FAILFAST} -- -cilium.provision=false -cilium.timeout=${GINKGO_TIMEOUT} -cilium.kubeconfig=${TESTDIR}/vagrant-kubeconfig'
                     }
                     post {
                         always {
