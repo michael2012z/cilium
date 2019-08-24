@@ -413,9 +413,9 @@ func (e *Endpoint) GetID16() uint16 {
 	return e.ID
 }
 
-// GetK8sPodLabels returns all labels that exist in the endpoint and were
+// getK8sPodLabels returns all labels that exist in the endpoint and were
 // derived from k8s pod.
-func (e *Endpoint) GetK8sPodLabels() pkgLabels.Labels {
+func (e *Endpoint) getK8sPodLabels() pkgLabels.Labels {
 	e.unconditionalRLock()
 	defer e.runlock()
 	allLabels := e.OpLabels.AllLabels()
@@ -2112,7 +2112,7 @@ func (e *Endpoint) waitForFirstRegeneration(ctx context.Context) error {
 			if err := e.rlockAlive(); err != nil {
 				return fmt.Errorf("endpoint was deleted while waiting for initial endpoint generation to complete")
 			}
-			hasSidecarProxy := e.HasSidecarProxy()=
+			hasSidecarProxy := e.HasSidecarProxy()
 			e.runlock()
 			if hasSidecarProxy && e.bpfProgramInstalled() {
 				// If the endpoint is determined to have a sidecar proxy,
