@@ -701,6 +701,26 @@ func (m *monitorOwnerDummy) NotifyMonitorDeleted(e *Endpoint) {
 
 type dummyManager struct{}
 
+func (d *dummyManager) ReleaseID(*Endpoint) error {
+	return nil
+}
+
+func (d *dummyManager) LookupCiliumID(uint16) *Endpoint {
+	return nil
+}
+
+func (d *dummyManager) LookupContainerID(string) *Endpoint {
+	return nil
+}
+
+func (d *dummyManager) Lookup(string) (*Endpoint, error) {
+	return nil, nil
+}
+
+func (d *dummyManager) AddEndpoint(regeneration.Owner, *Endpoint, string) error {
+	return nil
+}
+
 func (d *dummyManager) AllocateID(id uint16) (uint16, error) {
 	return uint16(1), nil
 }
@@ -718,7 +738,4 @@ func (d *dummyManager) RemoveReferences(map[id.PrefixType]string) {
 }
 
 func (d *dummyManager) RemoveID(uint16) {
-}
-
-func (d *dummyManager) ReleaseID(*Endpoint) {
 }
