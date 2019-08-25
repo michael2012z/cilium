@@ -283,7 +283,7 @@ func (s *EndpointManagerSuite) TestLookup(c *C) {
 			name: "endpoint by ipv4",
 			preTestRun: func() {
 				ipv4, err := addressing.NewCiliumIPv4("127.0.0.1")
-				ep.IPv4 = ipv4
+				ep.SetIPv4(ipv4)
 				c.Assert(err, IsNil)
 				ep.Expose(mgr)
 			},
@@ -301,7 +301,7 @@ func (s *EndpointManagerSuite) TestLookup(c *C) {
 			},
 			postTestRun: func() {
 				mgr.WaitEndpointRemoved(ep)
-				ep.IPv4 = nil
+				ep.SetIPv4(nil)
 			},
 		},
 		{
@@ -514,7 +514,7 @@ func (s *EndpointManagerSuite) TestLookupIPv4(c *C) {
 			preTestRun: func() {
 				ip, err := addressing.NewCiliumIPv4("127.0.0.1")
 				c.Assert(err, IsNil)
-				ep.IPv4 = ip
+				ep.SetIPv4(ip)
 				ep.Expose(mgr)
 			},
 			setupArgs: func() args {
@@ -529,7 +529,7 @@ func (s *EndpointManagerSuite) TestLookupIPv4(c *C) {
 			},
 			postTestRun: func() {
 				mgr.WaitEndpointRemoved(ep)
-				ep.IPv4 = nil
+				ep.SetIPv4(nil)
 			},
 		},
 		{
@@ -598,7 +598,7 @@ func (s *EndpointManagerSuite) TestLookupPodName(c *C) {
 			},
 			postTestRun: func() {
 				mgr.WaitEndpointRemoved(ep)
-				ep.IPv4 = nil
+				ep.SetIPv4(nil)
 			},
 		},
 		{
@@ -662,7 +662,7 @@ func (s *EndpointManagerSuite) TestUpdateReferences(c *C) {
 				ep.SetDockerEndpointID("dockerendpointID")
 				ip, err := addressing.NewCiliumIPv4("127.0.0.1")
 				c.Assert(err, IsNil)
-				ep.IPv4 = ip
+				ep.SetIPv4(ip)
 				ep.SetContainerName("containername")
 				return args{
 					ep: ep,
@@ -679,7 +679,7 @@ func (s *EndpointManagerSuite) TestUpdateReferences(c *C) {
 				ep.SetK8sPodName("")
 				ep.SetContainerID("")
 				ep.SetDockerEndpointID("")
-				ep.IPv4 = nil
+				ep.SetIPv4(nil)
 				ep.SetContainerName("")
 			},
 		},
@@ -696,7 +696,7 @@ func (s *EndpointManagerSuite) TestUpdateReferences(c *C) {
 		ep = mgr.lookupDockerEndpoint(want.ep.GetDockerEndpointID())
 		c.Assert(ep, checker.DeepEquals, want.ep, Commentf("Test Name: %s", tt.name))
 
-		ep = mgr.LookupIPv4(want.ep.IPv4.String())
+		ep = mgr.LookupIPv4(want.ep.IPv4Address().String())
 		c.Assert(ep, checker.DeepEquals, want.ep, Commentf("Test Name: %s", tt.name))
 
 		ep = mgr.lookupDockerContainerName(want.ep.GetContainerName())

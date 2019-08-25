@@ -28,7 +28,7 @@ import (
 )
 
 // runGC run CT's garbage collector for the given endpoint. `isLocal` refers if
-// the CT map is set to local. If `isIPv6` is set specifies that is the IPv6
+// the CT map is set to local. If `isIPv6` is set specifies that is the ipv6
 // map. `filter` represents the filter type to be used while looping all CT
 // entries.
 //
@@ -94,8 +94,8 @@ func createGCFilter(initialScan bool, restoredEndpoints []*endpoint.Endpoint) *c
 	if initialScan {
 		filter.ValidIPs = map[string]struct{}{}
 		for _, ep := range restoredEndpoints {
-			filter.ValidIPs[ep.IPv6.String()] = struct{}{}
-			filter.ValidIPs[ep.IPv4.String()] = struct{}{}
+			filter.ValidIPs[ep.IPv6Address().String()] = struct{}{}
+			filter.ValidIPs[ep.IPv4Address().String()] = struct{}{}
 		}
 	}
 
