@@ -29,13 +29,16 @@ import (
 var _ = Describe("K8sKafkaPolicyTest", func() {
 
 	var (
-		kubectl             *helpers.Kubectl
-		microscopeErr       error
-		microscopeCancel                       = func() error { return nil }
-		backgroundCancel    context.CancelFunc = func() { return }
-		backgroundError     error
-		l7Policy            = ""
-		demoPath            = ""
+		kubectl          *helpers.Kubectl
+		microscopeErr    error
+		microscopeCancel                    = func() error { return nil }
+		backgroundCancel context.CancelFunc = func() { return }
+		backgroundError  error
+
+		// these two are set in BeforeAll
+		l7Policy string
+		demoPath string
+
 		kafkaApp            = "kafka"
 		backupApp           = "empire-backup"
 		empireHqApp         = "empire-hq"

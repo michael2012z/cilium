@@ -28,7 +28,7 @@ var _ = Describe("K8sChaosTest", func() {
 
 	var (
 		kubectl       *helpers.Kubectl
-		demoDSPath    = ""
+		demoDSPath    string
 		testDSService = "testds-service"
 	)
 
@@ -170,8 +170,8 @@ var _ = Describe("K8sChaosTest", func() {
 	Context("Restart with long lived connections", func() {
 
 		var (
-			netperfManifest    = ""
-			netperfPolicy      = ""
+			netperfManifest    string
+			netperfPolicy      string
 			netperfServiceName = "netperf-service"
 			podsIps            map[string]string
 			netperfClient      = "netperf-client"

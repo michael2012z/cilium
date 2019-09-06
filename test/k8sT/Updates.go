@@ -11,10 +11,10 @@ import (
 )
 
 var (
-	demoPath         = ""
-	l7Policy         = ""
-	migrateSVCClient = ""
-	migrateSVCServer = ""
+	demoPath         string
+	l7Policy         string
+	migrateSVCClient string
+	migrateSVCServer string
 )
 
 var _ = Describe("K8sUpdates", func() {

@@ -29,20 +29,21 @@ import (
 var _ = Describe("K8sPolicyTest", func() {
 
 	var (
-		kubectl              *helpers.Kubectl
-		demoPath             = ""
-		l3Policy             = ""
-		l7Policy             = ""
-		l7PolicyKafka        = ""
-		serviceAccountPolicy = ""
-		knpDenyIngress       = ""
-		knpDenyEgress        = ""
-		knpDenyIngressEgress = ""
-		cnpDenyIngress       = ""
-		cnpDenyEgress        = ""
-		knpAllowIngress      = ""
-		knpAllowEgress       = ""
-		cnpMatchExpression   = ""
+		kubectl *helpers.Kubectl
+		// these are set in BeforeAll()
+		demoPath             string
+		l3Policy             string
+		l7Policy             string
+		l7PolicyKafka        string
+		serviceAccountPolicy string
+		knpDenyIngress       string
+		knpDenyEgress        string
+		knpDenyIngressEgress string
+		cnpDenyIngress       string
+		cnpDenyEgress        string
+		knpAllowIngress      string
+		knpAllowEgress       string
+		cnpMatchExpression   string
 		app1Service          = "app1-service"
 		microscopeErr        error
 		microscopeCancel                        = func() error { return nil }
@@ -560,10 +561,10 @@ var _ = Describe("K8sPolicyTest", func() {
 			)
 
 			var (
-				cnpToEntitiesAll     = ""
-				cnpToEntitiesWorld   = ""
-				cnpToEntitiesCluster = ""
-				cnpToEntitiesHost    = ""
+				cnpToEntitiesAll     string
+				cnpToEntitiesWorld   string
+				cnpToEntitiesCluster string
+				cnpToEntitiesHost    string
 			)
 
 			BeforeAll(func() {
@@ -614,10 +615,10 @@ var _ = Describe("K8sPolicyTest", func() {
 			)
 
 			var (
-				cnpUpdateAllow        = ""
-				cnpUpdateDeny         = ""
-				cnpUpdateNoSpecs      = ""
-				cnpUpdateDenyLabelled = ""
+				cnpUpdateAllow        string
+				cnpUpdateDeny         string
+				cnpUpdateNoSpecs      string
+				cnpUpdateDenyLabelled string
 			)
 
 			BeforeAll(func() {
@@ -880,12 +881,12 @@ EOF`, k, v)
 			clusterIP         string
 			secondNSclusterIP string
 
-			demoPath           = ""
-			l3L4Policy         = ""
-			cnpSecondNS        = ""
-			netpolNsSelector   = ""
-			l3l4PolicySecondNS = ""
-			demoManifest       = ""
+			demoPath           string
+			l3L4Policy         string
+			cnpSecondNS        string
+			netpolNsSelector   string
+			l3l4PolicySecondNS string
+			demoManifest       string
 		)
 
 		BeforeAll(func() {

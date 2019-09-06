@@ -855,12 +855,12 @@ func (kub *Kubectl) WaitForKubeDNSEntry(serviceName, serviceNamespace string) er
 		}
 
 		ctx, cancel := context.WithTimeout(context.Background(), MidCommandTimeout)
+		defer cancel()
 		// ClusterIPNone denotes that this service is headless; there is no
 		// service IP for this service, and thus the IP returned by `dig` is
 		// an IP of the pod itself, not ClusterIPNone, which is what Kubernetes
 		// shows as the IP for the service for headless services.
 		if serviceIP == v1.ClusterIPNone {
-			defer cancel()
 			res, err := kub.ExecInFirstPod(ctx, LogGathererNamespace, LogGathererSelector, fmt.Sprintf(digCMD, serviceNameWithNamespace, dnsClusterIP))
 			if err != nil {
 				logger.Debugf("failed to run dig in log-gatherer pod")
@@ -873,6 +873,10 @@ func (kub *Kubectl) WaitForKubeDNSEntry(serviceName, serviceNamespace string) er
 		log.Debugf("service is not headless; checking whether IP retrieved from DNS matches the IP for the service stored in Kubernetes")
 
 		res, err := kub.ExecInFirstPod(ctx, LogGathererNamespace, LogGathererSelector, fmt.Sprintf(digCMD, serviceNameWithNamespace, dnsClusterIP))
+		if err != nil {
+			logger.Debugf("failed to run dig in log-gatherer pod")
+			return false
+		}
 		serviceIPFromDNS := res.SingleOut()
 		if !govalidator.IsIP(serviceIPFromDNS) {
 			logger.Debugf("output of dig (%s) did not return an IP", serviceIPFromDNS)
@@ -2206,6 +2210,7 @@ func (kub *Kubectl) ciliumHealthPreFlightCheck() error {
 	return nil
 }
 
+// GetFilePath is a utility function which returns path to give fale relative to BasePath
 func (kub *Kubectl) GetFilePath(filename string) string {
 	return filepath.Join(kub.BasePath(), filename)
 }
