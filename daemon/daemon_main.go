@@ -50,6 +50,7 @@ import (
 	"github.com/cilium/cilium/pkg/loadinfo"
 	"github.com/cilium/cilium/pkg/logging"
 	"github.com/cilium/cilium/pkg/logging/logfields"
+	"github.com/cilium/cilium/pkg/maps/ctmap/gc"
 	"github.com/cilium/cilium/pkg/metrics"
 	monitorAPI "github.com/cilium/cilium/pkg/monitor/api"
 	"github.com/cilium/cilium/pkg/node"
@@ -1216,8 +1217,8 @@ func runDaemon() {
 
 	bootstrapStats.enableConntrack.Start()
 	log.Info("Starting connection tracking garbage collector")
-	d.endpointManager.EnableConntrackGC(option.Config.EnableIPv4, option.Config.EnableIPv6,
-		restoredEndpoints.restored)
+	gc.EnableConntrackGC(option.Config.EnableIPv4, option.Config.EnableIPv6,
+		restoredEndpoints.restored, d.endpointManager)
 	bootstrapStats.enableConntrack.End(true)
 
 	bootstrapStats.k8sInit.Start()
