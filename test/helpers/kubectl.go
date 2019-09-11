@@ -1086,8 +1086,9 @@ func (kub *Kubectl) generateCiliumYaml(options []string, filename string) error 
 
 	// TODO GH-8753: Use helm rendering library instead of shelling out to
 	// helm template
+	helmTemplate := filepath.Join(kub.BasePath(), HelmTemplate)
 	res := kub.ExecMiddle(fmt.Sprintf("helm template %s --namespace=kube-system %s > %s",
-		HelmTemplate, strings.Join(options, " "), filename))
+		helmTemplate, strings.Join(options, " "), filename))
 	if !res.WasSuccessful() {
 		return res.GetErr("Unable to generate YAML")
 	}

@@ -2,6 +2,7 @@ package k8sTest
 
 import (
 	"fmt"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -322,9 +323,9 @@ func InstallAndValidateCiliumUpgrades(kubectl *helpers.Kubectl, oldVersion, newV
 		}
 
 		By("Install Cilium pre-flight check DaemonSet")
-
+		helmTemplate := filepath.Join(kubectl.BasePath(), helpers.HelmTemplate)
 		res = kubectl.ExecMiddle("helm template " +
-			helpers.HelmTemplate + " " +
+			helmTemplate + " " +
 			"--namespace=kube-system " +
 			"--set preflight.enabled=true " +
 			"--set agent.enabled=false " +

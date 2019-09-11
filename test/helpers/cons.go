@@ -18,7 +18,6 @@ import (
 	"bytes"
 	"fmt"
 	"os"
-	"path"
 	"time"
 
 	k8sConst "github.com/cilium/cilium/pkg/k8s/apis/cilium.io"
@@ -40,14 +39,6 @@ var (
 
 	// CiliumStartTimeout is a predefined timeout value for Cilium startup.
 	CiliumStartTimeout = 100 * time.Second
-
-	// CiliumBasePath is the path to the cilium source repository
-	// relative to test dir
-	CiliumBasePath = "../"
-
-	// BasePath is the path in the Vagrant VMs to which the test directory
-	// is mounted
-	BasePath = path.Join(CiliumBasePath, "test")
 
 	// CheckLogs newtes a new buffer where all the warnings and checks that
 	// happens during the test are saved. This buffer will be printed in the
