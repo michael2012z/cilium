@@ -491,6 +491,7 @@ func NewDaemon(dp datapath.Datapath, iptablesManager rulesManager) (*Daemon, *en
 
 	bootstrapStats.bpfBase.Start()
 	err = d.init()
+
 	// We can only start monitor agent once cilium_event has been set up.
 	if option.Config.RunMonitorAgent {
 		monitorAgent, err := monitoragent.NewAgent(context.TODO(), defaults.MonitorBufferPages)

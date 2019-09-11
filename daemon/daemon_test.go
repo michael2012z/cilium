@@ -86,6 +86,9 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		panic("TempDir() failed.")
 	}
+
+	defer os.RemoveAll(tempRunDir)
+
 	err = os.Mkdir(filepath.Join(tempRunDir, "globals"), 0777)
 	if err != nil {
 		panic("Mkdir failed")
@@ -148,10 +151,6 @@ func (ds *DaemonSuite) SetUpTest(c *C) {
 
 func (ds *DaemonSuite) TearDownTest(c *C) {
 	ds.d.endpointManager.RemoveAll()
-
-	if ds.d != nil {
-		os.RemoveAll(option.Config.RunDir)
-	}
 
 	if ds.kvstoreInit {
 		kvstore.DeletePrefix(common.OperationalPath)
